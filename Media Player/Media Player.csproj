@@ -3,9 +3,32 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net6.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
     <RootNamespace>Media_Player</RootNamespace>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Ressources\Logo.png" />
+    <None Remove="Ressources\play_button.png" />
+    <None Remove="Ressources\Thumbnail.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.46" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Ressources\Thumbnail.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Ressources\Logo.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Ressources\play_button.png" />
+  </ItemGroup>
 
 </Project>

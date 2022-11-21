@@ -4,6 +4,120 @@
              xmlns:local="clr-namespace:Media_Player"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <Style TargetType="Border"
+           x:Key="video_border">
+            <Setter Property="Width" Value=" 200"/>
+            <Setter Property="BorderThickness" Value="1,1,1,1"/>
+            <Setter Property="BorderBrush" Value="#FF3B3B3B"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <!--
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Direction="-90" ShadowDepth="0" Color="#FFF0F0F0" BlurRadius="3"/>
+                </Setter.Value>
+            </Setter>
+            -->
+        </Style>
+        <Style x:Key="TheAwesomeXAMLimage" TargetType="ContentControl">
+            <!-- Add additional Setters Here -->
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ContentControl">
+
+                        <!--This file is NOT compatible with Silverlight-->
+                        <Viewbox xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" Stretch="Uniform">
+                            <Canvas Name="blue_copy" Width="100" Height="100">
+                                <Canvas.RenderTransform>
+                                    <TranslateTransform X="0" Y="0"/>
+                                </Canvas.RenderTransform>
+                                <Canvas.Resources>
+                                    <!--Unknown tag: inkscape:path-effect-->
+                                </Canvas.Resources>
+                                <!--Unknown tag: sodipodi:namedview-->
+                                <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path1235" Fill="#FFFFFFFF">
+                                    <Path.Data>
+                                        <PathGeometry Figures="M 82.220515 55.989304 39.553621 80.623046 a 6.9282032 6.9282032 30 0 1 -10.392305 -6 l 0 -49.267485 a 6.9282032 6.9282032 150 0 1 10.392305 -6 l 42.666894 24.633743 a 6.9282032 6.9282032 90 0 1 0 12 z" FillRule="NonZero"/>
+                                    </Path.Data>
+                                    <Path.RenderTransform>
+                                        <TranslateTransform X="-4.515163"/>
+                                    </Path.RenderTransform>
+                                </Path>
+                            </Canvas>
+                        </Viewbox>
+
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="next" TargetType="ContentControl">
+            <!-- Add additional Setters Here -->
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ContentControl">
+
+                        <!--This file is NOT compatible with Silverlight-->
+                        <Viewbox xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" Stretch="Uniform">
+                            <Canvas Name="blue_copy" Width="100" Height="100">
+                                <Canvas.RenderTransform>
+                                    <TranslateTransform X="0" Y="0"/>
+                                </Canvas.RenderTransform>
+                                <Canvas.Resources>
+                                    <!--Unknown tag: inkscape:path-effect-->
+                                </Canvas.Resources>
+                                <!--Unknown tag: sodipodi:namedview-->
+                                <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path1235" Fill="#FFFFFFFF">
+                                    <Path.Data>
+                                        <PathGeometry Figures="M 82.220515 55.989304 39.553621 80.623046 a 6.9282032 6.9282032 30 0 1 -10.392305 -6 l 0 -49.267485 a 6.9282032 6.9282032 150 0 1 10.392305 -6 l 42.666894 24.633743 a 6.9282032 6.9282032 90 0 1 0 12 z" FillRule="NonZero"/>
+                                    </Path.Data>
+                                    <Path.RenderTransform>
+                                        <TranslateTransform X="-4.515163"/>
+                                    </Path.RenderTransform>
+                                </Path>
+                                <Rectangle xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Canvas.Left="87.111679" Canvas.Top="18.383163" Width="4" Height="63.373531" RadiusX="2" RadiusY="2" Name="rect15664" Fill="#FFFFFFFF" StrokeThickness="0.895565"/>
+                            </Canvas>
+                        </Viewbox>
+
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <Style x:Key="prev" TargetType="ContentControl">
+            <!-- Add additional Setters Here -->
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ContentControl">
+
+                        <!--This file is NOT compatible with Silverlight-->
+                        <Viewbox xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" Stretch="Uniform">
+                            <Canvas Name="blue_copy" Width="100" Height="100">
+                                <Canvas.RenderTransform>
+                                    <TranslateTransform X="0" Y="0"/>
+                                </Canvas.RenderTransform>
+                                <Canvas.Resources>
+                                    <!--Unknown tag: inkscape:path-effect-->
+                                    <!--Unknown tag: inkscape:path-effect-->
+                                </Canvas.Resources>
+                                <!--Unknown tag: sodipodi:namedview-->
+                                <Rectangle xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Canvas.Left="9.5140944" Canvas.Top="18.383163" Width="4" Height="63.373531" RadiusX="2" RadiusY="2" Name="rect15664" Fill="#FFFFFFFF" StrokeThickness="0.895565"/>
+                                <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path17947" Fill="#FFFFFFFF">
+                                    <Path.Data>
+                                        <PathGeometry Figures="m 95.874402 25.086128 2e-6 49.48384 a 6.9282032 6.9282032 150 0 1 -10.392304 6 L 42.627836 55.82805 a 6.9282032 6.9282032 89.999997 0 1 -1e-6 -12 L 85.482097 19.086128 a 6.9282032 6.9282032 29.999997 0 1 10.392305 6 z" FillRule="NonZero"/>
+                                    </Path.Data>
+                                    <Path.RenderTransform>
+                                        <TranslateTransform X="-19.67321"/>
+                                    </Path.RenderTransform>
+                                </Path>
+                            </Canvas>
+                        </Viewbox>
+
+
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
     </Application.Resources>
 </Application>
