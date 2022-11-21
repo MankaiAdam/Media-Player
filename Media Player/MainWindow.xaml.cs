@@ -58,7 +58,7 @@ namespace Media_Player
                     HtmlWeb web = new HtmlWeb();
 
                     var doc = web.Load(html);
-
+                    
                     foreach (HtmlNode div in doc.DocumentNode.SelectNodes("//html//body//a").ToArray()) {
                         if (div.Attributes["data-jsarwt"] != null)
                         {
