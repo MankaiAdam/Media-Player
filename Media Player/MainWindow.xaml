@@ -84,11 +84,12 @@
                 <Label x:Name="duration_display" Foreground="White" Content="1:56:03" VerticalContentAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Center"/>
             </Grid>
 
-            <StackPanel x:Name="media_buttons" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,15,0,0" Height="55">
-                <Button x:Name="prev_button" HorizontalAlignment="Center" VerticalAlignment="Center" Click="Prev_Click" FontSize="14" Style="{StaticResource prev}" BorderBrush="{x:Null}" Height="24" Width="24" Margin="0,0,10,0"/>
-                <Button x:Name="play_toggle" HorizontalAlignment="Center" VerticalAlignment="Center" Click="Play_Toggle_Click" FontSize="14" BorderBrush="{x:Null}" Width="34" Height="34" Style="{StaticResource play}" Background="White"/>
-                <Button x:Name="next_button" HorizontalAlignment="Center" VerticalAlignment="Center" Click="Next_Click" FontSize="14" Style="{StaticResource next}" BorderBrush="{x:Null}" Height="24" Width="24" Margin="10,0,0,0"/>
-                <Button x:Name="fullscreen_button" HorizontalAlignment="Center" VerticalAlignment="Center" Click="fullscreen_Click" FontSize="14" Style="{StaticResource next}" BorderBrush="{x:Null}" Height="24" Width="24" Margin="10,0,0,0"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,15,0,0" Height="55">
+                    <Button HorizontalAlignment="Center" VerticalAlignment="Center" Click="Button_Click" FontSize="14" Style="{StaticResource prev}" BorderBrush="{x:Null}" Height="24" Width="24" Margin="0,0,10,0"/>
+                    <Button HorizontalAlignment="Center" VerticalAlignment="Center" Click="Button_Click" FontSize="14" BorderBrush="{x:Null}" Width="34" Height="34" Style="{StaticResource TheAwesomeXAMLimage}" Background="White">
+                    </Button>
+                    <Button HorizontalAlignment="Center" VerticalAlignment="Center" Click="Button_Click" FontSize="14" Style="{StaticResource next}" BorderBrush="{x:Null}" Height="24" Width="24" Margin="10,0,0,0"/>
+                </StackPanel>
             </StackPanel>
         </StackPanel>
         <!--</StackPanel>-->
