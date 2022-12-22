@@ -4,8 +4,71 @@
              xmlns:local="clr-namespace:Media_Player"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-        <Style TargetType="Border"
-           x:Key="video_border">
+        <SolidColorBrush x:Key="ProgressBar.Progress" Color="#FF06B025"/>
+        <SolidColorBrush x:Key="ProgressBar.Background" Color="#FFE6E6E6"/>
+        <SolidColorBrush x:Key="ProgressBar.Border" Color="#FFBCBCBC"/>
+        <Style x:Key="ProgressBarStyle1" TargetType="{x:Type ProgressBar}">
+            <Setter Property="Foreground" Value="{StaticResource ProgressBar.Progress}"/>
+            <Setter Property="Background" Value="{StaticResource ProgressBar.Background}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource ProgressBar.Border}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ProgressBar}">
+                        <Grid x:Name="TemplateRoot">
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Determinate"/>
+                                    <VisualState x:Name="Indeterminate">
+                                        <Storyboard RepeatBehavior="Forever">
+                                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="Animation" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)">
+                                                <EasingDoubleKeyFrame KeyTime="0" Value="0.25"/>
+                                                <EasingDoubleKeyFrame KeyTime="0:0:1" Value="0.25"/>
+                                                <EasingDoubleKeyFrame KeyTime="0:0:2" Value="0.25"/>
+                                            </DoubleAnimationUsingKeyFrames>
+                                            <PointAnimationUsingKeyFrames Storyboard.TargetName="Animation" Storyboard.TargetProperty="(UIElement.RenderTransformOrigin)">
+                                                <EasingPointKeyFrame KeyTime="0" Value="-0.5,0.5"/>
+                                                <EasingPointKeyFrame KeyTime="0:0:1" Value="0.5,0.5"/>
+                                                <EasingPointKeyFrame KeyTime="0:0:2" Value="1.5,0.5"/>
+                                            </PointAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="2"/>
+                            <Rectangle x:Name="PART_Track"/>
+                            <Grid x:Name="PART_Indicator" ClipToBounds="true" HorizontalAlignment="Left">
+                                <Rectangle x:Name="Indicator" Fill="{TemplateBinding Foreground}" RadiusX="2" RadiusY="2"/>
+                                <Rectangle x:Name="Animation" Fill="{TemplateBinding Foreground}" RenderTransformOrigin="0.5,0.5" RadiusX="2" RadiusY="2">
+                                    <Rectangle.RenderTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform/>
+                                            <SkewTransform/>
+                                            <RotateTransform/>
+                                            <TranslateTransform/>
+                                        </TransformGroup>
+                                    </Rectangle.RenderTransform>
+                                </Rectangle>
+                            </Grid>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="Orientation" Value="Vertical">
+                                <Setter Property="LayoutTransform" TargetName="TemplateRoot">
+                                    <Setter.Value>
+                                        <RotateTransform Angle="-90"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsIndeterminate" Value="true">
+                                <Setter Property="Visibility" TargetName="Indicator" Value="Collapsed"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <Style x:Key="video_border" TargetType="Border">
             <Setter Property="Width" Value=" 200"/>
             <Setter Property="BorderThickness" Value="1,1,1,1"/>
             <Setter Property="BorderBrush" Value="#FF3B3B3B"/>
@@ -20,7 +83,153 @@
             </Setter>
             -->
         </Style>
-        <Style x:Key="TheAwesomeXAMLimage" TargetType="ContentControl">
+
+        <Style x:Key="category_button_border" TargetType="Border">
+            <Setter Property="Height" Value="28"/>
+            <Setter Property="Margin" Value="0,0,10,0"/>
+            <Setter Property="BorderThickness" Value="1,1,1,1"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="VerticalAlignment" Value="center"/>
+            <Setter Property="CornerRadius" Value="14"/>
+            <!--
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Direction="-90" ShadowDepth="0" Color="#FFF0F0F0" BlurRadius="3"/>
+                </Setter.Value>
+            </Setter>
+            -->
+        </Style>
+
+        <Style x:Key="category_button" TargetType="Button">
+            <Setter Property="Height" Value=" 28"/>
+            <Setter Property="Foreground" Value=" White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Grid>
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup Name="CommonStates">
+                                    <VisualState Name="Normal">
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetName="border" 
+                                                    Storyboard.TargetProperty="(Border.Background).Color"
+                                                    To="{TemplateBinding Background}"
+                                                    Duration="0:0:0.2"/>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState Name="MouseOver">
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetName="border" 
+                                                    Storyboard.TargetProperty="(Border.Background).Color" 
+                                                    To="#FF444444" 
+                                                    Duration="0:0:0.2"/>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <Border x:Name="border" CornerRadius="14" BorderBrush="{x:Null}" BorderThickness="0" Background ="#FF353535" Margin ="0,0,10,0" Padding = "14,0,14,2">
+                                <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center">
+                                </ContentPresenter>
+                            </Border>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <!--
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Direction="-90" ShadowDepth="0" Color="#FFF0F0F0" BlurRadius="3"/>
+                </Setter.Value>
+            </Setter>
+            -->
+        </Style>
+            
+        <Style x:Key="add_button" TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Grid>
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup Name="CommonStates">
+                                    <VisualState Name="Normal">
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetName="border" 
+                                                Storyboard.TargetProperty="(Border.Background).Color"
+                                                To="{TemplateBinding Background}"
+                                                Duration="0:0:0.2"/>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState Name="MouseOver">
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetName="border" 
+                                                Storyboard.TargetProperty="(Border.Background).Color" 
+                                                To="#FF444444" 
+                                                Duration="0:0:0.2"/>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <Border x:Name="border" CornerRadius="17" BorderBrush="{x:Null}" BorderThickness="0" Background ="#FF353535" Margin ="{TemplateBinding Margin}" Padding="{TemplateBinding Padding}">
+                                <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center">
+                                </ContentPresenter>
+                            </Border>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="nav_button" TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Grid>
+                            <!--<VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup Name="CommonStates">
+                                    <VisualState Name="Normal">
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetName="border" 
+                                                Storyboard.TargetProperty="(Border.Background).Color"
+                                                To="{TemplateBinding Background}"
+                                                Duration="0:0:0.2"/>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState Name="MouseOver">
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetName="border" 
+                                                Storyboard.TargetProperty="(Border.Background).Color" 
+                                                To="#FF333333" 
+                                                Duration="0:0:0.2"/>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>-->
+                            <Border x:Name="border" CornerRadius="12" BorderBrush="{x:Null}" BorderThickness="0" Background = "Transparent" Margin ="{TemplateBinding Margin}" Padding="{TemplateBinding Padding}">
+                                <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center">
+                                </ContentPresenter>
+                            </Border>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" TargetName="border"  Value="#FF272727">
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" TargetName="border" Value="#FF292929"/>
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="play" TargetType="ContentControl">
             <!-- Add additional Setters Here -->
             <Setter Property="Template">
                 <Setter.Value>
@@ -33,9 +242,7 @@
                                     <TranslateTransform X="0" Y="0"/>
                                 </Canvas.RenderTransform>
                                 <Canvas.Resources>
-                                    <!--Unknown tag: inkscape:path-effect-->
                                 </Canvas.Resources>
-                                <!--Unknown tag: sodipodi:namedview-->
                                 <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path1235" Fill="#FFFFFFFF">
                                     <Path.Data>
                                         <PathGeometry Figures="M 82.220515 55.989304 39.553621 80.623046 a 6.9282032 6.9282032 30 0 1 -10.392305 -6 l 0 -49.267485 a 6.9282032 6.9282032 150 0 1 10.392305 -6 l 42.666894 24.633743 a 6.9282032 6.9282032 90 0 1 0 12 z" FillRule="NonZero"/>
@@ -51,6 +258,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        
         <Style x:Key="next" TargetType="ContentControl">
             <!-- Add additional Setters Here -->
             <Setter Property="Template">
@@ -118,6 +326,264 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <Style x:Key="hamburger" TargetType="Button">
+            <!-- Add additional Setters Here -->
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ContentControl">
+                        <Border Background="{TemplateBinding Background}">
+                            <!-- ContentPresenter here -->
+                            <Viewbox xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" Stretch="Uniform">
+                            <Canvas Name="svg2449" Width="24" Height="24">
+                                <Canvas.RenderTransform>
+                                    <TranslateTransform X="0" Y="0"/>
+                                </Canvas.RenderTransform>
+                                <Canvas.Resources/>
+                                <!--Unknown tag: sodipodi:namedview-->
+                                <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path2447" Fill="#FFFFFFFF" StrokeThickness="2" Stroke="#FFFFFFFF" StrokeLineJoin="Round" StrokeStartLineCap="Round" StrokeEndLineCap="Round">
+                                    <Path.Data>
+                                        <PathGeometry Figures="M4 6H20M4 12H20M4 18H20" FillRule="NonZero"/>
+                                    </Path.Data>
+                                </Path>
+                            </Canvas>
+                        </Viewbox>
+                        </Border>
+                        <!--This file is NOT compatible with Silverlight-->
+                        
+
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="movie_clapper" TargetType="ContentControl">
+            <!-- Add additional Setters Here -->
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ContentControl">
+
+                        <!--This file is NOT compatible with Silverlight-->
+                        <Viewbox xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" Stretch="Uniform">
+                            <Canvas Name="Layer_1" Width="122.88" Height="111.21">
+                                <Canvas.RenderTransform>
+                                    <TranslateTransform X="0" Y="0"/>
+                                </Canvas.RenderTransform>
+                                <Canvas.Resources/>
+                                <!--Unknown tag: sodipodi:namedview-->
+                                <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path5508" Fill="#FFFFFFFF">
+                                    <Path.Data>
+                                        <PathGeometry Figures="m 29.667104 9.218609 h 64.49 c 11.087246 0.03295 20.067046 9.012753 20.099996 20.1 v 51.53 c -0.0384 11.08334 -9.01664 20.057081 -20.099996 20.090001 h -64.49 C 18.583107 100.91113 9.6045869 91.932609 9.5771039 80.848609 v -51.53 c 0.03292 -11.083359 9.0066591 -20.061565 20.0900001 -20.1 z m 25.23 38.65 19 13.25 c 2.584868 1.582111 2.664722 5.308612 0.15 7 l -18.89 13.01 c -2.727215 2.166629 -6.752604 0.242992 -6.78 -3.24 v -26.62 0 c -0.0059 -3.366428 3.787885 -5.338746 6.54 -3.4 z m 23.15 -18.08 6.8 -14.3 h -21 l -6.8 14.3 z m 12.46 -14.3 -6.8 14.3 H 105.9471 c 0.75409 -3.55e-4 1.48262 0.273288 2.05 0.77 v -1.24 c -0.0275 -7.630597 -6.20939 -13.808059 -13.839996 -13.83 z m -39.13 14.3 6.79 -14.3 h -21.58 l -6.8 14.3 z m -27.29 0 6.8 -14.3 h -1.22 c -7.631253 0.0165 -13.8135 6.198747 -13.83 13.83 v 0.47 z m 83.869996 5.49 c -0.56738 0.496712 -1.29591 0.770355 -2.05 0.77 H 15.837104 v 44.8 c -0.01106 7.650772 6.179238 13.86345 13.83 13.88 h 64.49 c 7.626086 -0.0328 13.801666 -6.203939 13.839996 -13.83 v -45.62 z" FillRule="NonZero"/>
+                                    </Path.Data>
+                                </Path>
+                                <!--Unknown tag: metadata-->
+                            </Canvas>
+                        </Viewbox>
+
+
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="music_cd" TargetType="ContentControl">
+            <!-- Add additional Setters Here -->
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ContentControl">
+
+                        <!--This file is NOT compatible with Silverlight-->
+                        <Viewbox xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" Stretch="Uniform">
+                            <Canvas Name="svg19646" Width="700" Height="700">
+                                <Canvas.RenderTransform>
+                                    <TranslateTransform X="0" Y="0"/>
+                                </Canvas.RenderTransform>
+                                <Canvas.Resources/>
+                                <!--Unknown tag: sodipodi:namedview-->
+                                <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path21357" Fill="#FFFFFFFF" StrokeThickness="1.27578">
+                                    <Path.Data>
+                                        <PathGeometry Figures="m 641.79056 50.299994 c 0 -6.583503 -3.4421 -12.743574 -9.22022 -16.554713 -5.77295 -3.767467 -13.18413 -4.74301 -19.85135 -2.532476 L 242.25911 153.3907 c -8.69297 2.85921 -14.51276 10.49503 -14.51276 19.08768 v 324.10675 c -18.2597 -12.86906 -40.74662 -20.78781 -65.37294 -20.78781 -60.08065 0 -108.957541 45.44949 -108.957541 101.30888 0 55.86309 48.880861 101.30889 108.957541 101.30889 60.08065 0 108.93638 -45.44949 108.95754 -101.28921 V 309.10365 l 326.87792 -107.2667 v 213.69688 c -18.2597 -12.86413 -40.74661 -20.7878 -65.37295 -20.7878 -60.08064 0 -108.95753 45.44949 -108.95753 101.30888 0 55.86308 48.88087 101.30889 108.95753 101.30889 60.08067 0 108.95756 -45.4495 108.95756 -101.30889 0 -0.12013 -0.0413 -0.22105 -0.0413 -0.32196 0 -0.0625 0.0413 -0.10091 0.0413 -0.16339 z M 162.37579 637.90187 c -36.0431 0 -65.372936 -27.27093 -65.372936 -60.78386 0 -33.51292 29.329836 -60.78385 65.372936 -60.78385 36.0431 0 65.37295 27.27093 65.37295 60.78385 0 33.50801 -29.32985 60.78386 -65.37295 60.78386 z M 271.33334 266.14973 V 186.78257 L 598.21126 78.96719 v 79.89492 z m 261.50497 290.69469 c -36.0431 0 -65.37293 -27.27092 -65.37293 -60.78385 0 -33.51293 29.32983 -60.78385 65.37293 -60.78385 36.0431 0 65.37295 27.27092 65.37295 60.78385 0 33.53261 -29.32985 60.78385 -65.37295 60.78385 z" FillRule="NonZero"/>
+                                    </Path.Data>
+                                </Path>
+                            </Canvas>
+                        </Viewbox>
+
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="favorite" TargetType="ContentControl">
+            <!-- Add additional Setters Here -->
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ContentControl">
+
+                        <!--This file is NOT compatible with Silverlight-->
+                        <Viewbox xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" Stretch="Uniform">
+                            <Canvas Name="svg21430" Width="700" Height="700">
+                                <Canvas.RenderTransform>
+                                    <TranslateTransform X="0" Y="0"/>
+                                </Canvas.RenderTransform>
+                                <Canvas.Resources/>
+                                <!--Unknown tag: sodipodi:namedview-->
+                                <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path21428" Fill="#FFFFFFFF" StrokeThickness="1.14009">
+                                    <Path.Data>
+                                        <PathGeometry Figures="m 205.57031 67.931641 c -29.44876 0.332068 -58.78134 8.08387 -84.5339 22.375672 -33.199909 18.355407 -60.330061 47.362157 -76.665344 81.582847 -13.333435 27.78641 -19.594003 58.89171 -18.245377 89.67219 1.250617 29.27412 9.365035 58.2606 23.724048 83.81652 8.482438 15.15173 19.15583 29.04973 31.472468 41.283 74.434335 75.97071 148.856915 151.95338 223.298595 227.91661 10.04474 10.01306 23.61351 16.42611 37.74719 17.71527 14.45216 1.39167 29.34843 -2.53796 41.20994 -10.91783 4.26692 -2.9689 8.05115 -6.56173 11.61228 -10.3331 74.06792 -75.55326 148.08185 -151.15811 222.1135 -226.74744 20.17912 -20.55115 35.41985 -45.89988 44.15128 -73.34554 9.54843 -29.845 11.49058 -62.075 5.64615 -92.8575 -5.53756 -29.42433 -18.2343 -57.4984 -36.84733 -80.9652 C 611.93373 113.92823 588.01227 95.10892 560.93836 83.179725 533.91876 71.212784 503.9009 66.116011 474.44534 68.488187 c -27.08595 2.141399 -53.65879 10.548726 -77.01834 24.43215 -14.58296 8.625173 -27.8777 19.373053 -39.56564 31.627063 -3.22592 3.29019 -6.45185 6.58038 -9.67777 9.87057 -5.99485 -6.05274 -11.81581 -12.28418 -18.01835 -18.12688 C 310.0871 97.555735 285.70737 83.424358 259.39188 75.529939 241.97572 70.281494 223.75841 67.712026 205.57031 67.931641 Z m 2.09961 45.912109 c 2.21807 0.006 4.48897 0.0653 6.58008 0.16406 5.3266 0.2736 10.63636 0.84674 15.84822 1.74129 5.10953 0.8753 10.09731 2.02923 15.09103 3.49462 2.78276 0.8229 5.44295 1.69326 8.21156 2.70933 9.33502 3.40936 18.23924 7.86886 26.61628 13.27739 3.1296 2.03207 6.12207 4.14861 9.0353 6.38455 6.29563 4.8403 12.04215 10.22233 17.49696 15.9693 13.77842 14.12495 27.55729 28.24946 41.33542 42.37469 15.43713 -15.80803 30.83363 -31.65626 46.30987 -47.42578 4.07682 -4.01833 8.38059 -7.75106 12.9002 -11.20687 17.08011 -13.10197 37.36945 -21.99261 58.59951 -25.58073 18.03829 -3.09319 36.71254 -2.39317 54.47167 2.02588 3.76748 0.93291 7.64458 2.08537 11.37158 3.37136 1.98161 0.69472 3.89839 1.39762 5.79399 2.1602 4.37292 1.73636 8.64537 3.72129 12.81099 5.9079 0.71471 0.39526 1.65523 0.8806 2.37954 1.28934 8.34933 4.61188 16.2201 10.16609 23.36874 16.40252 7.32234 6.38741 13.98626 13.53093 19.82984 21.29447 4.6909 6.23003 8.94202 12.99232 12.53035 19.98616 3.55933 6.9079 6.59998 14.30048 8.9472 21.70026 2.59272 8.12906 4.42031 16.49752 5.51659 24.95811 0.20124 1.61855 0.41298 3.45475 0.56404 5.16403 2.35527 25.35535 -2.18259 51.33543 -13.16892 74.32018 -6.79955 14.30734 -16.10747 27.39686 -27.29506 38.60533 -37.06795 37.98929 -74.11787 75.99632 -111.19708 113.97453 -10.44849 10.65085 -20.83414 21.36355 -31.25818 32.03849 -27.03035 27.72422 -54.04765 55.46174 -81.09768 83.16643 -4.51041 4.33756 -11.57885 5.7486 -17.39284 3.40508 -2.85983 -1.09485 -5.26443 -3.08812 -7.28321 -5.35221 -74.72143 -76.6039 -149.45272 -153.19841 -224.15823 -229.81772 -4.12613 -4.31314 -8.02194 -9.00796 -11.505805 -13.76 -6.45728 -8.84818 -11.874361 -18.45292 -16.105469 -28.55664 -2.268386 -5.43535 -4.256451 -11.1908 -5.834358 -16.9409 -0.759039 -2.79011 -1.427194 -5.50456 -2.030706 -8.38318 -1.574291 -7.44812 -2.545011 -15.05648 -2.909827 -22.60922 -0.204207 -4.19813 -0.227491 -8.60693 -0.04884 -12.78397 0.185662 -4.75017 0.628834 -9.48839 1.280766 -14.1968 0.281208 -1.91246 0.609045 -4.01962 0.979793 -5.99638 0.56433 -3.08329 1.240566 -6.1429 1.99408 -9.12296 5.381523 -21.37139 15.883134 -41.44132 30.455629 -57.982 14.30157 -16.3086 32.47017 -29.26748 52.71707 -37.10915 7.49026 -2.92077 15.39358 -5.19359 23.34846 -6.70767 2.75692 -0.52261 5.73017 -0.99688 8.5951 -1.34545 5.43285 -0.67023 10.876 -1.00047 16.30635 -1.00787 z" FillRule="NonZero"/>
+                                    </Path.Data>
+                                </Path>
+                            </Canvas>
+                        </Viewbox>
+
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="playlist" TargetType="ContentControl">
+            <!-- Add additional Setters Here -->
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ContentControl">
+
+                        <!--This file is NOT compatible with Silverlight-->
+                        <Viewbox xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" Stretch="Uniform">
+                            <Canvas Name="svg14" Width="15" Height="14">
+                                <Canvas.RenderTransform>
+                                    <TranslateTransform X="0" Y="0"/>
+                                </Canvas.RenderTransform>
+                                <Canvas.Resources/>
+                                <!--Unknown tag: sodipodi:namedview-->
+                                <Canvas Name="g8">
+                                    <Canvas.RenderTransform>
+                                        <TranslateTransform X="-5" Y="-5"/>
+                                    </Canvas.RenderTransform>
+                                    <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="IconColor" Fill="#FFFFFFFF" StrokeThickness="1" Opacity="1">
+                                        <Path.Data>
+                                            <PathGeometry Figures="M 5.5315518 5.0338637 H 16.445872 c 0.292354 0 0.531552 0.2391983 0.531552 0.5315519 0 0.2923535 -0.239198 0.5315518 -0.531552 0.5315518 H 5.5315518 C 5.2391983 6.0969674 5 5.8577691 5 5.5654156 5 5.273062 5.2391983 5.0338637 5.5315518 5.0338637 Z M 15 13.88 v 4.23 c 0 0.39 0.42 0.63 0.76 0.43 l 3.53 -2.12 c 0.32 -0.19 0.32 -0.66 0 -0.86 L 15.76 13.44 C 15.42 13.25 15 13.49 15 13.88 Z M 5.5480066 9.2545204 H 16.462327 c 0.292354 0 0.531552 0.239199 0.531552 0.5315516 0 0.292354 -0.239198 0.531552 -0.531552 0.531552 H 5.5480066 c -0.2923535 0 -0.5315518 -0.239198 -0.5315518 -0.531552 0 -0.2923526 0.2391983 -0.5315516 0.5315518 -0.5315516 z m 0 4.2216776 h 6.9409764 c 0.292354 0 0.531552 0.239199 0.531552 0.531552 0 0.292354 -0.239198 0.531552 -0.531552 0.531552 H 5.5480066 c -0.2923535 0 -0.5315518 -0.239198 -0.5315518 -0.531552 0 -0.292353 0.2391983 -0.531552 0.5315518 -0.531552 z" FillRule="NonZero"/>
+                                        </Path.Data>
+                                    </Path>
+                                </Canvas>
+                                <!--Unknown tag: metadata-->
+                            </Canvas>
+                        </Viewbox>
+
+
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="add" TargetType="ContentControl">
+            <!-- Add additional Setters Here -->
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ContentControl">
+
+                        <!--This file is NOT compatible with Silverlight-->
+                        <Viewbox xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" Stretch="Uniform">
+                            <Canvas Name="svg14" Width="15" Height="14">
+                                <Canvas.RenderTransform>
+                                    <TranslateTransform X="0" Y="0"/>
+                                </Canvas.RenderTransform>
+                                <Canvas.Resources/>
+                                <!--Unknown tag: sodipodi:namedview-->
+                                <Canvas Name="g8">
+                                    <Canvas.RenderTransform>
+                                        <TranslateTransform X="-5" Y="-5"/>
+                                    </Canvas.RenderTransform>
+                                    <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="IconColor" Fill="#FFFFFFFF" StrokeThickness="1.3092" Opacity="1">
+                                        <Path.Data>
+                                            <PathGeometry Figures="M 11.809361 16.044484 V 6.9573476 c 0 -0.3827505 0.313158 -0.6959089 0.695909 -0.6959089 0.382749 0 0.695907 0.3131584 0.695907 0.6959089 v 9.0871364 c 0 0.382749 -0.313158 0.695908 -0.695907 0.695908 -0.382751 0 -0.695909 -0.313159 -0.695909 -0.695908 z" FillRule="NonZero"/>
+                                        </Path.Data>
+                                    </Path>
+                                    <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path7852" Fill="#FFFFFFFF" StrokeThickness="1.3092" Opacity="1">
+                                        <Path.Data>
+                                            <PathGeometry Figures="m 7.9583749 10.81233 h 9.0871401 c 0.38275 0 0.695909 0.31316 0.695909 0.695909 0 0.38275 -0.313159 0.695908 -0.695909 0.695908 H 7.9583749 c -0.382749 0 -0.6959074 -0.313158 -0.6959074 -0.695908 0 -0.382749 0.3131584 -0.695909 0.6959074 -0.695909 z" FillRule="NonZero"/>
+                                        </Path.Data>
+                                    </Path>
+                                </Canvas>
+                                <!--Unknown tag: metadata-->
+                            </Canvas>
+                        </Viewbox>
+
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
         
+        <Style x:Key="sort" TargetType="ContentControl">
+            <!-- Add additional Setters Here -->
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ContentControl">
+
+                        <!--This file is NOT compatible with Silverlight-->
+                        <Viewbox xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" Stretch="Uniform">
+                            <Canvas Name="svg7903" Width="700" Height="700">
+                                <Canvas.RenderTransform>
+                                    <TranslateTransform X="0" Y="0"/>
+                                </Canvas.RenderTransform>
+                                <Canvas.Resources/>
+                                <!--Unknown tag: sodipodi:namedview-->
+                                <Canvas Name="g7901">
+                                    <Canvas.RenderTransform>
+                                        <TranslateTransform X="0" Y="77.423033"/>
+                                    </Canvas.RenderTransform>
+                                    <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path7897" Fill="#FFFFFFFF">
+                                        <Path.Data>
+                                            <PathGeometry Figures="m 186.61 258.41 h 326.77 c 19.191 0 28.801 -23.199 15.23 -36.766 L 365.23 58.254 c -8.4102 -8.4141 -22.051 -8.4141 -30.461 0 l -163.38 163.39 c -13.57 13.566 -3.9609 36.766 15.227 36.766 z" FillRule="NonZero"/>
+                                        </Path.Data>
+                                    </Path>
+                                    <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path7899" Fill="#FFFFFFFF">
+                                        <Path.Data>
+                                            <PathGeometry Figures="m 171.38 338.36 163.38 163.39 c 8.4141 8.4102 22.051 8.4102 30.461 0 l 163.38 -163.39 c 13.57 -13.566 3.9609 -36.77 -15.23 -36.77 h -326.77 c -19.188 0 -28.797 23.203 -15.23 36.77 z" FillRule="NonZero"/>
+                                        </Path.Data>
+                                    </Path>
+                                </Canvas>
+                            </Canvas>
+                        </Viewbox>
+
+
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="sort_button" TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Grid>
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup Name="CommonStates">
+                                    <VisualState Name="Normal">
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetName="border" 
+                                                Storyboard.TargetProperty="(Border.Background).Color"
+                                                To="{TemplateBinding Background}"
+                                                Duration="0:0:0.2"/>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState Name="MouseOver">
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetName="border" 
+                                                Storyboard.TargetProperty="(Border.Background).Color" 
+                                                To="#FF444444" 
+                                                Duration="0:0:0.2"/>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <Border x:Name="border" CornerRadius="14" BorderBrush="{x:Null}" BorderThickness="0" Background ="#FF353535" Margin ="{TemplateBinding Margin}" Padding="{TemplateBinding Padding}">
+                                <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center">
+                                </ContentPresenter>
+                            </Border>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Application.Resources>
 </Application>
